@@ -17,7 +17,10 @@ jobs:
         hugo-version: '0.59.1'
 
     - name: Build
-      run: hugo --minify
+      run: |
+        git submodule init
+        git submodule update
+        hugo --minify
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v2
