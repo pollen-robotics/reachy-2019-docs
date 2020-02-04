@@ -1,4 +1,4 @@
-baseURL = "https://pollen-robotics.github.io/"
+baseURL = "https://pollen-robotics.github.io/reachy-docs/"
 languageCode = "en-us"
 title = "Reachy manual"
 theme = "book"
