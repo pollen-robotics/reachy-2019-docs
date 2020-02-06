@@ -95,6 +95,18 @@ Then, we specify which types of hand are attached to the arm. In our cases we se
 
 Similarly to the arm, we define the USB port on which we should find the part "/dev/ttyUSB*". The _camera_id_ corresponds to the index of the camera. It will be used to open the video stream using the [OpenCV library](https://docs.opencv.org/3.4.9/d8/dfe/classcv_1_1VideoCapture.html).
 
+### Reachy: putting everything together
+
+The _Reachy_ object is mainly a container to regroup the different parts. It also provides you higher level methods, for instance to program a complex motion happening on multiple parts at the same time.
+
+```python
+reachy = Reachy(
+    left_arm=...,
+    right_arm=...,
+    head=...,
+)
+```
+
 ## Reachy's modularity: based on [Luos technology](https://www.luos-robotics.com/)
 
 To permit the parts system in Reachy, we are relying on the [Luos technology](https://www.luos-robotics.com/). This modular system is based around the concept of using a tiny electronic Luos board for each sensors or effectors in your robot. They can be daisy chained and are automatically detected and recognized.
