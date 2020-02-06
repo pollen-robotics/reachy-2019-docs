@@ -95,6 +95,21 @@ Then, we specify which types of hand are attached to the arm. In our cases we se
 
 Similarly to the arm, we define the USB port on which we should find the part "/dev/ttyUSB*". The _camera_id_ corresponds to the index of the camera. It will be used to open the video stream using the [OpenCV library](https://docs.opencv.org/3.4.9/d8/dfe/classcv_1_1VideoCapture.html).
 
-## Luos modules and gates
+## Reachy's modularity: based on [Luos technology](https://www.luos-robotics.com/)
 
-(available through their [Luos gate](https://luos-robotics.github.io/index.html) and USB-serial interface)
+To permit the parts system in Reachy, we are relying on the [Luos technology](https://www.luos-robotics.com/). This modular system is based around the concept of using a tiny electronic Luos board for each sensors or effectors in your robot. They can be daisy chained and are automatically detected and recognized.
+
+Those modules are exposed to the Raspberry-Pi using a [Luos gate](https://luos-robotics.github.io/index.html) that communicates via USB-serial interface.
+
+<!-- TODO: photo -->
+
+Each part is composed of several Luos modules:
+
+* Arm
+    * a dynamixel module to communicate with the motors
+    * a force sensor module for the gripper
+    * a gate to communicate with the Raspberry-Pi
+* Head
+    * three DC motor controllers for Orbita
+    * a dynamixel module for the antennas
+    * a gate to communicate with the Raspberry-Pi
