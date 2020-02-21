@@ -38,8 +38,8 @@ reachy = Reachy(
         hand='force_gripper',
     ),
     head=Head(
-        camera_id=0,
         luos_port='/dev/ttyUSB*',
+        camera_id=0,
     ),
 )
 ```
@@ -93,7 +93,7 @@ Then, we specify which types of hand are attached to the arm. In our cases we se
     ),
 ```
 
-Similarly to the arm, we define the USB port on which we should find the part "/dev/ttyUSB*". The _camera_id_ corresponds to the index of the camera. It will be used to open the video stream using the [OpenCV library](https://docs.opencv.org/3.4.9/d8/dfe/classcv_1_1VideoCapture.html).
+Similarly to the arm, we define the USB port on which we should find the part "/dev/ttyUSB\*". The *camera_id* corresponds to the index of the camera. It will be used to open the video stream using the [OpenCV library](https://docs.opencv.org/3.4.9/d8/dfe/classcv_1_1VideoCapture.html).
 
 ### Reachy: putting everything together
 

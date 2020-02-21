@@ -59,13 +59,13 @@ They are servo motors that you **control in position**. You can also control the
 To access a specific motor (here _elbow_pitch_) in Python code:
 ```python
 reachy.right_arm.elbow_pitch
->>> **TODO**
+>>> <DxlMotor "right_arm.elbow_pitch" pos="-83.209" mode="stiff">
 ```
 
 And to get its present position:
 ```python
 reachy.right_arm.elbow_pitch.present_position
->>> 88.54
+>>> -83.121
 ```
 
 {{< hint info >}}
