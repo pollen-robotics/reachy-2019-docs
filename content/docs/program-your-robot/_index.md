@@ -17,7 +17,7 @@ In this section, we will cover:
 * make the head look somewhere specific,
 * and run pre-defined behaviors.
 
-The full Python's API is also accessible [here](TODO).
+The full Python's API is also accessible [here](https://pollen-robotics.github.io/reachy/).
 
 {{< hint danger >}}
 Before actually running any code, we strongly recommend you to take a look at the [Safety first section](../posts/safety). It provides simple hints to avoid damaging your robot.
