@@ -7,4 +7,4 @@ enableEmoji = true
 
 [params]
   BookRepo = "https://github.com/pollen-robotics/reachy-docs"
-  BookEditPath = "edit/master/reachy-docs/content"
+  BookEditPath = "edit/master/content"
