@@ -12,9 +12,13 @@ weight: 30
 
 ## Everything is already installed :tada:
 
-Reachy comes with a [Raspberry-Pi 4](https://www.raspberrypi.org) dedicated to its control. When you receive, your Reachy, the board is pre-installed with all required softwares. **So, you don't have to install anything on your computer.**
+Reachy comes with a [Raspberry-Pi 4](https://www.raspberrypi.org) dedicated to its control. When you receive your Reachy, the board is pre-installed with all required softwares. **So, you don't have to install anything on your computer.**
 
-This section is meant to give you a bit more information on how things are actually working. First, you can find the Raspberry-Pi inside the trunk of the robot, as shown on this picture:
+This section is meant to:
+* let you know how to connect to the Raspberry-Pi,
+* give you a bit more information on how things are actually working. 
+
+First, you can find the Raspberry-Pi inside the trunk of the robot, as shown on this picture:
 
 **TODO**
 
@@ -32,13 +36,12 @@ The image is based on the [Raspbian Buster OS](https://www.raspberrypi.org/downl
 {{< hint warning >}}
 **Install on your own machine**
 
-We provide a pre-install Raspberry-Pi to ensure that all Reachy are shipped ready to be used and with the same configuration. Yet, if you want to use your own computer to control Reachy, or if you want to customize the Raspbian image it is possible. It is a more complex approach and requires knowledge on development environment. The whole process will soon be described in its own section.
-<!-- The details can be found on the [_Install from scratch_](TODO) documentation. -->
+We provide a pre-install Raspberry-Pi to ensure that all Reachy are shipped ready to be used and with the same configuration. Yet, if you want to use your own computer to control Reachy, or if you want to customize the Raspbian image it is possible. It is a more complex approach and requires knowledge on development environment. Some components are dedicated to the Raspberry Pi (such as the camera and you will have to either use a Raspberry Pi or change the cameras).
 {{< /hint >}}
 
 ## Connect to your Reachy
 
-What is left to configure is how you want to access your Reachy. There are a few options. You will present the most common below.
+What is left to configure is how you want to access your Reachy. There are a few options. We will present the most common below.
 
 ### Work directly on the robot
 
@@ -64,13 +67,13 @@ If you already know how to connect a Raspberry-Pi, you can follow your usual pro
 {{< hint warning >}}
 **Login access**
 
-The robot comes with the default login: _pi_ and a default password: _reachy_. **Make sure to change the password if you enable remote access! Or even better, only connect using ssh key.** The hostname is  _reachy_.
+The robot comes with the default login: _pi_ and a default password: _reachy_. **Make sure to change the password if you enable remote access! Or even better, only connect using ssh key.**
 {{< /hint >}}
 
 To connect to your robot, you will need to either:
 
 * know its IP address on your network (see with your FAI or IT to get the information)
-* use the mDNS protocol and access the robot via its hostname
+* use the mDNS protocol and access the robot via its hostname.
 
 More information is accessible on the [Raspberry-Pi official documentation](https://www.raspberrypi.org/documentation/remote-access/ip-address.md).
 
