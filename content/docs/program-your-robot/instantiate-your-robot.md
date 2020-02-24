@@ -63,6 +63,10 @@ reachy = Reachy(
 
 If you don't see any error, good news, you are now connected to your Robot and all the parts have been found! :tada: :tada: :tada:
 
+{{< hint danger >}}
+If it didn't work, check the [FAQ](../getting-started/faq) or the [forum](https://forum.pollen-robotics.com)! Your problem is most likely already describe there.
+{{< /hint >}}
+
 ### Going deeper: the arm part
 
 Let's dive a bit into the details of the code above.
