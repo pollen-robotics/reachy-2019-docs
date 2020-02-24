@@ -11,4 +11,4 @@ weight: 160
 # Reachy's arm specifications
 
 ## Standard version
-## Strong version
+## Performance version
