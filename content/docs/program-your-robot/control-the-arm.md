@@ -261,6 +261,38 @@ reachy.goto(
 )
 ```
 
+You can also define positions, save them and then directly _go to_ those positions.
+
+```python
+upper_pos = {
+    'head.left_antenna': 0,
+    'head.right_antenna': 0,
+}
+lower_pos = {
+    'head.left_antenna': 90,
+    'head.right_antenna': -90,
+}
+
+for _ in range(3):
+    reachy.goto(goal_positions=lower_pos, duration=2, wait=True)
+    reachy.goto(goal_positions=upper_pos, duration=1, wait=True)
+```
+
+{{< hint info >}}
+An easy way to define a position is to actually record it directly on the robot. To do that, you can play with the compliant mode so you can freely move the robot and make it adopt the position you want.
+Then, you can record its position using a code similar to:
+```python
+arm_position = {
+    motor.name: motor.present_position for motor in reachy.right_arm.motors
+}
+
+reachy_whole_position = {
+    motor.name: motor.present_position for motor in reachy.motors
+}
+```
+Make sure only the motors you want to track are actually included in the position you have recorded.
+{{< /hint >}}
+
 ## Different trajectory interpolation
 
 All goto accept a _interpolation_mode_ argument. This lets you define the way you want the trajectory to interpolate from A to B.
@@ -280,10 +312,156 @@ Note that both trajectories start and finish at the same points. Yet, the follow
 What's show in the figure above is a theoretical trajectory. The motor has a low level controller that will try to follow this curve as closely as possible. Yet, depending on the speed/acceleration that you try to reach and the motor configuration, if it has to move a big loads, the real and theoretical curves may differ.
 {{< /hint >}}
 
-
-
 ## Grasping
 
-## Record trajectories
+While the motors of the Force Gripper hand can be controlled like the rest of the motors of the arm, there is an additional functionality that lets you easily close and open the gripper.
 
-## FK & IK
+Opening the gripper is as simple as:
+
+```python
+reachy.right_arm.hand.open()
+```
+
+This actually simply runs a _goto_ on the gripper motor with pre-defined target position (-30°) and duration (1s).
+
+More interestingly, you can also use the close method:
+
+```python
+reachy.right_arm.hand.close()
+```
+
+This also runs a _goto_ on the gripper, but it uses the force sensor inside the gripper to detect when it did grab something. It will try to automatically adjust the grip, to maintain enough force to hold the object while not forcing too much and overheat the motor.
+
+All parameters used in the [close](https://pollen-robotics.github.io/reachy/autoapi/reachy/parts/hand/index.html#reachy.parts.hand.ForceGripper.close) method can be adjusted depending on your needs (please refer to the the [APIs](https://pollen-robotics.github.io/reachy/autoapi/reachy/parts/hand/index.html#reachy.parts.hand.ForceGripper.close) for more details.)
+
+{{< hint danger >}}
+The gripper on Reachy's end effector is not meant to hold objects for a long time. The motor used in the gripper will quickly overload if doing so. Holding objects as you can see on the TicTacToe demo for instance is a good approximation of what the robot can do for long period of time (hold ~5s rest ~10s).
+
+If you need to hold objects for longer period of time, you probably need to have a specific gripper for this task. While this is part of Pollen Robotics plan, we do not yet have a ready-to-use solution for this kind of use. Let us know if you would be interested in such features or want to help design one.
+{{< /hint >}}
+
+The Force Gripper also gives you access to the current _grip_force_. The load sensor is located inside Reachy's gripper. It measures the force applied on the gripper (exactly it measures the deformation of the gripper due to the grasping).
+
+```python
+print(reachy.right_arm.hand.grip_force)
+>>>TODO
+```
+
+{{< hint info >}}
+The returned value is nor accurate nor express in a standard unit system. Only relative values should be taken into account.
+
+For instance:
+```python
+if abs(reachy.right_arm.hand.grip_force) < 50:
+    print('not holding')
+else:
+    print('holding')
+```
+{{< /hint >}}
+
+<!-- **TODO: photo of load sensor and gripper** -->
+
+## Record & Replay Trajectories
+
+So far, we have showed you how to make your robot move using _goto_ and pre-defined position. This works well for simple motion. But sometimes you would like to have more complex motions. That's when another technique comes into place: **recording by demonstration**.
+
+### Record by demonstration
+
+With this approach, you will demonstrate whole trajectories on Reachy by moving it by hand (using the compliant mode) and record its position at high-frequency (about 100Hz). Depending on what you want, you can record a single motor, or multiple at the same time. We provide a [TrajectoryRecorder](https://pollen-robotics.github.io/reachy/autoapi/reachy/trajectory/recorder/index.html#reachy.trajectory.recorder.TrajectoryRecorder) object that makes this process really simple.
+
+For instance, assuming you want to record a movement on the Right Arm and that it is already compliant:
+```python
+recorder = TrajectoryRecorder(reachy.right_arm.motors)
+```
+
+And when you are ready to record:
+```python
+recorder.start()
+```
+And when the movement is over:
+```python
+recorder.stop()
+```
+
+The recorded trajectories can then be accessed via:
+
+```python
+print(recorder.trajectories)
+>>> TODO
+```
+
+You can save it as a numpy array using:
+```python
+import numpy as np
+
+np.savez('my-recorded-trajectory.npz', **recorder.trajectories)
+```
+
+The recorder can be restart as many times as you want. A new trajectory will be recorded on store as ```recorder.trajectories```.
+
+You can record any list of motors. For instance if you want to record the left antenna and the gripper you can use:
+```python
+recorded_motors = [reachy.head.left_antenna, reachy.right_arm.hand.gripper]
+
+recorder = TrajectoryRecorder(recorded_motors)
+
+recorder.start()
+time.sleep(10)
+recorder.stop()
+```
+
+### Replay a trajectory
+
+Let's say you have recorded a nice motion and save it on the disk using the code above. You can first reload it at any time using:
+
+```python
+my_loaded_trajectory = np.load('my-recorded-trajectory.npz')
+```
+
+Then, you want to play it on the robot. To do that, we have created an object called [TrajectoryPlayer](https://pollen-robotics.github.io/reachy/autoapi/reachy/trajectory/player/index.html#reachy.trajectory.player.TrajectoryPlayer). It can be used as follow:
+
+```python
+trajectory_player = TrajectoryPlayer(reachy, my_loaded_trajectory)
+```
+
+First, you need to specify on which robot you want to play the trajectory. If you have multiple Reachy, you can record a movement on one and play it on the other.
+Then, you need to specify which trajectory you want to play.
+
+Assuming the motors you want to use to play the trajectory are stiff and that the robot is in position where he can play the trajectory:
+
+```python
+trajectory_player.play(wait=True, fade_in_duration=1.0)
+```
+
+The code above will play the trajectory, wait for it to finish. 
+
+{{< hint danger >}}
+The _fade_in_duration_ ensure there is no jump at the begining of the motion. Indeed, if you play a trajectory from a different starting point that what you record, the robot will try to reach this starting position as fast as it can. This parameter basically says, "first goto the recorded starting position in 1s, then play the trajectory".
+
+Always think about starting position before recording and replaying trajectories!
+{{< /hint >}}
+
+You can also play multiple trajectories as a sequence. Assuming you have recorded three motion (traj_1, traj_2 and traj_3):
+
+```python
+TrajectoryPlayer(reachy, traj_1).play(wait=True, fade_in_duration=1)
+TrajectoryPlayer(reachy, traj_2).play(wait=True, fade_in_duration=1)
+TrajectoryPlayer(reachy, traj_3).play(wait=True, fade_in_duration=1)
+```
+
+or in a more concise way:
+
+```python
+for traj in [traj_1, traj_2, traj_3]:
+    TrajectoryPlayer(reachy, traj).play(wait=True, fade_in_duration=1)
+```
+
+
+### Work on a trajectory - Smoothing
+
+* cubic smooth
+* traj are only numpy arrays 
+* any filter/smoothing on arrays can work
+
+
+## Forward & Inverse Kinematics
