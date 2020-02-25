@@ -1,11 +1,7 @@
 ---
 title: "Control The Arm"
 weight: 220
-# bookFlatSection: false
-# bookToc: true
-# bookHidden: false
-# bookCollapseSection: false
-# bookComments: true
+latex: true
 ---
 
 # Control the arm
@@ -524,7 +520,15 @@ print(reachy.right_arm.forward_kinematics(joints_position=[0, 0, 0, 0, 0, 0, 0, 
 
 {{< hint info >}}
 The 4x4 matrix returned by the forward kinematics method is what is often called a pose. It actually encodes both the 3D translation and the 3D rotation into one single representation. 
-<!-- **TODO: latex matrice** -->
+$$
+\begin{bmatrix}
+R_{11} & R_{12} & R_{13} & T_x\\\\\\
+R_{21} & R_{22} & R_{23} & T_y\\\\\\
+R_{31} & R_{32} & R_{33} & T_z\\\\\\
+0 & 0 & 0 & 1
+\end{bmatrix}
+$$
+
 {{< /hint >}}
 
 You can also get the current pose by doing:
