@@ -456,12 +456,112 @@ for traj in [traj_1, traj_2, traj_3]:
     TrajectoryPlayer(reachy, traj).play(wait=True, fade_in_duration=1)
 ```
 
-
 ### Work on a trajectory - Smoothing
 
-* cubic smooth
-* traj are only numpy arrays 
-* any filter/smoothing on arrays can work
+Recorded trajectories are actually simple objects. It's a dict in the form: 
 
+```{motor_name: numpy_array_of_position}```
+
+Position arrays have the same length for all motors. You can thus convert the whole trajectory as a 2D array of shape _MxS_ where _M_ is the number of motor and _S_ is the number of sample in the trajectory. The number of sample corresponds roughly to the duration in seconds x 100 (the default sampling frequency).
+
+By recording a trajectory by demonstration, you may sometimes also record involuntary movements or jerkiness. When replayed, you may observe such artefacts. A good practice is to actually apply some smoothing/filtering on the trajectory before saving it.
+
+As they are store as [numpy arrays](https://numpy.org), you can use all typical libraries for this task (numpy/scipy/etc). Depending on the type of movements you recorded or what you want to do (eg. really smooth and slow moves, accurate trajectory, etc), the smoothing you want to apply may vary and there is not a single approach that will work for all types of moves.
+
+We still provide a _cubic smooth_ functionalities as it is something we often use. The [cubic smoothing](https://pollen-robotics.github.io/reachy/autoapi/reachy/trajectory/interpolation/index.html?highlight=cubic#reachy.trajectory.interpolation.cubic_smooth) will garantee to have continuous acceleration which is really important for human perception. You simply need to choose the number of keypoints that will be used to represent your smoothed trajectory.
+
+```python
+from reachy.trajectory.interpolation import cubic_smooth
+
+smoothed_trajectories = cubic_smooth(recorder.trajectories, nb_kp=10)
+```
+
+{{< hint info >}}
+The cubic smooth function will keep the same number of samples by default. But you can modify this behavior using the _out_points_ parameters.
+{{< /hint >}}
+
+<!-- **TODO: plot** -->
 
 ## Forward & Inverse Kinematics
+
+In all examples above, we have used joint coordinates. This means that we have controlled each joint separately. This can be hard and is often far from what we actually do as humans. When we want to grasp an object in front of us, we think of where we should put our hand, not how to flex each individual muscle to reach this position. This approach relies on the cartesian coordinates: the 3D position and orientation in space.
+
+Forward and Inverse Kinematics is a way to go from one coordinates system to the other:
+
+* forward kinematics: joint coordinates --> cartesian coordinates
+* inverse kinematics: cartesian coordinates --> joint coordinates
+
+### Kinematic model
+
+We have defined the whole kinematic model of the arm. On a right arm equipped with a force gripper this actually look like this:
+
+* shoulder_pitch - translation: [0, -0.19, 0] rotation: [0, 1, 0]
+* shoulder_roll - translation: [0, 0, 0] rotation: [1, 0, 0]
+* arm_yaw - translation: [0, 0, 0] rotation: [0, 0, 1]
+* elbow_pitch - translation: [0, 0, -0.307] rotation: [0, 1, 0]
+* forearm_yaw - translation: [0, 0, 0] rotation: [0, 0, 1]
+* wrist_pitch - translation: [0, 0, -0.224] rotation: [0, 1, 0]
+* wrist_roll - translation: [0, 0, -0.032] rotation: [1, 0, 0]
+* gripper - translation: [0, -0.185, -0.06] rotation: [0, 0, 0]
+
+<!-- **TODO: schema** -->
+
+This describe the translation and rotation needed to go from the previous motor to the next one. We actually use a simplified Denavit hHrtenberg notation.
+
+<!-- TODO: model origin -->
+
+### Forward kinematics
+
+Using these parameters we can actually compute the 3D position and orientation of any joint in the arm considering their joint angles. This can indeed be formalized as a trigonometry problem.
+
+We provide a function to directly compute the forward kinematics of a reachy arm. Assuming you are working on a Right Arm with a Force Gripper (8 joints), you can find the pose when all motors are at their zero position:
+
+
+```python
+print(reachy.right_arm.forward_kinematics(joints_position=[0, 0, 0, 0, 0, 0, 0, 0]))
+>>> TODO
+```
+
+{{< hint info >}}
+The 4x4 matrix returned by the forward kinematics method is what is often called a pose. It actually encodes both the 3D translation and the 3D rotation into one single representation. 
+<!-- **TODO: latex matrice** -->
+{{< /hint >}}
+
+You can also get the current pose by doing:
+```python
+current_position = [m.present_position for m in reachy.right_arm.motors]
+print(reachy.right_arm.forward_kinematics(joints_position=current_position))
+>>> TODO
+```
+
+{{< hint warning >}}
+If you are using an external 3D tracker, you may observe difference between the measure end effector position and the one given by the forward kinematics.
+
+Keep in mind that the forward kinematics rely on a theoretical model of the Reachy arm. You may have difference due to motor jerk or assembly approximation.
+{{< /hint >}}
+
+### Inverse kinematics
+
+Knowing where you arm is located in the 3D space can be useful but most of the time what you want is to move the arm in cartesian coordinates. You want to have the possibility to say: "move your hand to [x, y, z] with a 90° rotation around Z axis".
+
+This is what inverse kinematics does. We have provided a method to help you. You need to give it a 4x4 target pose (as defined in the forward kinematics) and an initial joint state. 
+
+```python
+TODO: cool example
+```
+
+Yet, it's important to understand that while the forward kinematics has a unique and well defined solution, the inverse kinematics is a much harder and ill defined problem. 
+
+First, a Right Arm with a Gripper has 8 Degrees Of Freedom (8 motors) meaning that you may have multiple solutions to reach the same 3D point in space.
+
+Second, at the moment, the inverse kinematics is computed using an approximation method that may take time to converge. You also need to give it a starting point that may have a tremendous influence on the final result.
+
+
+{{< hint warning >}}
+Multiple approaches exist for tackling the inverse kinematics problem. We have provided the most straightforward one, using black box optimization, that work in a general context. Yet, we intend to provide other ones more dedicated to specific context: 
+
+* having more natural movement
+* minimizing change when performing whole cartesian trajectory
+* computation speed
+* ...
+{{< /hint >}}
