@@ -12,9 +12,13 @@ weight: 190
 
 Reachy's torso area includes the following elements :
 
-RASPBERRY PI 4 2G MODEL B
+Computer: RASPBERRY PI 4 2G MODEL B
 
-ReSpeaker Mic Array v2.0
+Microphone: ReSpeaker Mic Array v2.0
 
-Coral TPU G950-01456-01
+TPU: Coral G950-01456-01
+
+Speaker: Visaton VS-FRS7/8
+
+Amplifier: Drocking PAM8620
 
