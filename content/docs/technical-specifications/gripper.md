@@ -10,5 +10,7 @@ weight: 170
 
 # Reachy's gripper specifications
 
+
 Animated by 1 Dynamixel AX-18A.
+
 Includes a micro load cell 0.78 Kg
