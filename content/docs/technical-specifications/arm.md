@@ -31,6 +31,9 @@ right_arm.hand.wrist_roll, array -45., 45.
 right_arm.hand.gripper, array -69., 20.
 
 
+Maximum payload: 500 grams
+
+
 ## Standard version
 
 Animated by the following motors: 1 Dynamixel MX-106T, 3 Dynamixel MX-64AT, 1 Dynamixel MX-28AT and 2 Dynamixel AX-18A.
