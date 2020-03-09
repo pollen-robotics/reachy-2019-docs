@@ -10,7 +10,7 @@ weight: 160
 
 # Reachy's arm specifications
 
-Reachy's arm offers 7 degrees of movement. 
+**Reachy's arm offers 7 degrees of movement**
 
 Right arm:
 
@@ -31,7 +31,7 @@ right_arm.hand.wrist_roll, array -45., 45.
 right_arm.hand.gripper, array -69., 20.
 
 
-Maximum payload: 500 grams
+**Maximum payload: 500 grams**
 
 
 ## Standard version
@@ -41,8 +41,7 @@ Animated by the following motors: 1 Dynamixel MX-106T, 3 Dynamixel MX-64AT, 1 Dy
 ## Performance version
 
 Animated by the following motors: 3 Dynamixel MX-106T, 1 Dynamixel MX-64AT, 2 Dynamixel MX-28AT and 1 Dynamixel AX-18A.
-
-Limited angles per motor:
+http://support.robotis.com/en/product/actuator/dynamixel/mx_series/mx-64at_ar.htm
 
 
  
