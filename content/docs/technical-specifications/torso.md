@@ -22,3 +22,7 @@ Speaker: Visaton VS-FRS7/8
 
 Amplifier: Drocking PAM8620
 
+Embedded PC
+
+Power supply: power 180W - output 12V (input 110/120)
+
