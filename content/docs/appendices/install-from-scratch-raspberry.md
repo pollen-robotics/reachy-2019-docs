@@ -38,7 +38,6 @@ Once booted and logged in the Raspberry-Pi, we need to run raspi-config to setup
 ## Install extra stuff
 
 * Install IPython, Jupyter, Matplotlib: ```pip3 install ipython jupyter matplotlib```
-* Add extra PATH: ```echo 'export PATH="~/.local/bin:$PATH"' >> ~/.bashrc```
 
 ## Check if everything is fine
 
