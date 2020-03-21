@@ -2,7 +2,7 @@
 const characterPressed=String.fromCharCode(e.charCode);if(!isHotkey(characterPressed)){return;}
 input.focus();e.preventDefault();}
 function isHotkey(character){const dataHotkeys=input.getAttribute('data-hotkeys')||'';return dataHotkeys.indexOf(character)>=0;}
-function init(){input.removeEventListener('focus',init);input.required=true;loadScript('/reachy-docs/flexsearch.min.js');loadScript('/reachy-docs/en.search-data.min.3798bde98a49e36d95f0ec326e17d7f9ae3e8c338092215362e87ce209ee07ae.js',function(){input.required=false;search();});}
+function init(){input.removeEventListener('focus',init);input.required=true;loadScript('/reachy-docs/flexsearch.min.js');loadScript('/reachy-docs/en.search-data.min.9cd805c20e0c5bc72ae179ec711824719e3bb734ce6aad59a275656af74b19bb.js',function(){input.required=false;search();});}
 function search(){while(results.firstChild){results.removeChild(results.firstChild);}
 if(!input.value){return;}
 const searchHits=window.bookSearchIndex.search(input.value,10);searchHits.forEach(function(page){const li=document.createElement('li'),a=li.appendChild(document.createElement('a'));a.href=page.href;a.textContent=page.title;results.appendChild(li);});}
