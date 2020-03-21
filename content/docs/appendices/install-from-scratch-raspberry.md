@@ -31,11 +31,11 @@ Once booted and logged in the Raspberry-Pi, we need to run raspi-config to setup
 * Clone Reachy software: ```git clone https://github.com/pollen-robotics/reachy```
 * Checkout latest release ```cd reachy```and ```git checkout tags/v1.0.0.a2```
 * Install atlas for scipy: ```sudo apt install -y libatlas-base-dev```
+* Install deps for opencv: ```sudo apt install -y libhdf5-dev libhdf5-serial-dev libhdf5-103 libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5 libatlas-base-dev libjasper-dev```
 * Install Reachy dependencies using the system python3: ```pip3 install -r ~/dev/reachy/software/requirements.txt```
 * Install Reachy software using the system python3: ```pip3 install -e ~/dev/reachy/software```
 * Get the Access Point and dashboard libraries: ```cd ~/dev```and ```git clone https://github.com/pollen-robotics/RAP```
 * Install them: ```cd ~/dev/RAP/``` and ```sudo bash install.sh``` (Say Yes both time when asked during install)
-* Install opencv ```sudo apt install -y python3-opencv```
 
 ## Install extra stuff
 
