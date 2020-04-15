@@ -30,15 +30,15 @@ from reachy import Reachy, parts
 
 reachy = Reachy(
     left_arm=LeftArm(
-        luos_port='/dev/ttyUSB*',
+        io='/dev/ttyUSB*',
         hand='force_gripper',
     ),
     right_arm=RightArm(
-        luos_port='/dev/ttyUSB*',
+        io='/dev/ttyUSB*',
         hand='force_gripper',
     ),
     head=Head(
-        luos_port='/dev/ttyUSB*',
+        io='/dev/ttyUSB*',
         camera_id=0,
     ),
 )
@@ -51,12 +51,12 @@ from reachy import Reachy, parts
 
 reachy = Reachy(
     right_arm=RightArm(
-        luos_port='/dev/ttyUSB*',
+        io='/dev/ttyUSB*',
         hand='force_gripper',
     ),
     head=Head(
         camera_id=0,
-        luos_port='/dev/ttyUSB*',
+        io='/dev/ttyUSB*',
     ),
 )
 ```
@@ -79,7 +79,7 @@ Our API is available through the [reachy](https://github.com/pollen-robotics/rea
 
 ```python
     right_arm=RightArm(
-        luos_port='/dev/ttyUSB*',
+        io='/dev/ttyUSB*',
         hand='force_gripper',
     ),
 ```
@@ -93,7 +93,7 @@ Then, we specify which types of hand are attached to the arm. In our cases we se
 ```python
     head=Head(
         camera_id=0,
-        luos_port='/dev/ttyUSB*',
+        io='/dev/ttyUSB*',
     ),
 ```
 
