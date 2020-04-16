@@ -25,7 +25,7 @@ First, you don't need a real Reachy. You can access the simulator without having
 
 What you only need is to install our Python’s package. It can be found on [GitHub](https://github.com/pollen-robotics/reachy) or directly on [PyPi](https://pypi.org/project/reachy/). It requires Python 3 and a few classical dependencies (numpy, scipy, etc). This software is the same one that runs on the real robot. We've simply included a specific IO layer that changes the communication with the hardware (motors and sensors) to use a WebSocket communication that interacts with the 3D visualisation.
 
-You also need to use a Web browser that is compatible with WebGL, which is the case with all more or less recent browsers. It will also most likely not work on mobile devices, as Unity support is only partial at this time (See http://docs.unity3d.com/Manual/webgl-browsercompatibility.html for details).
+You also need to use a Web browser that is compatible with WebGL, which is the case with all more or less recent browsers. It will also most likely not work on mobile devices, as Unity support is only partial at this time (See https://docs.unity3d.com/Manual/webgl-browsercompatibility.html for details).
 
 ### Getting started
 
