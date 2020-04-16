@@ -10,6 +10,14 @@ weight: 160
 
 # Reachy's arm specifications
 
+Arm mass = 1.670 kg
+
+shoulder mass = 240 g
+upper arm mass = 610 g
+forearm mass = 590 g
+gripper mass = 230 g
+
+
 **Reachy's arm offers 7 degrees of movement**
 
 Right arm:
