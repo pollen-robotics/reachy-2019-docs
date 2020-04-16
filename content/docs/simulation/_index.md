@@ -44,7 +44,7 @@ r = Reachy(
 )
 ```
 
-This creates a web socket server in the background that connects to the Unity simulation. When opening http://reachy-simu.pollen-robotics.com, click on the 'Connect' button and you should see the connection status going green, meaning both are synced.
+This creates a web socket server in the background that connects to the Unity simulation. When opening  [http://reachy-simu.pollen-robotics.com](http://reachy-simu.pollen-robotics.com), click on the 'Connect' button and you should see the connection status going green, meaning both are synced.
 
 Then, you can run command using Python’s API and you should see the visualisation move!
 For instance:
