@@ -328,7 +328,7 @@ reachy.right_arm.hand.close()
 
 This also runs a _goto_ on the gripper, but it uses the force sensor inside the gripper to detect when it did grab something. It will try to automatically adjust the grip, to maintain enough force to hold the object while not forcing too much and overheat the motor.
 
-All parameters used in the [close](https://pollen-robotics.github.io/reachy/autoapi/reachy/parts/hand/index.html#reachy.parts.hand.ForceGripper.close) method can be adjusted depending on your needs (please refer to the the [APIs](https://pollen-robotics.github.io/reachy/autoapi/reachy/parts/hand/index.html#reachy.parts.hand.ForceGripper.close) for more details.)
+All parameters used in the [close](https://pollen-robotics.github.io/reachy/autoapi/reachy/parts/hand/index.html#reachy.parts.hand.ForceGripper.close) method can be adjusted depending on your needs (please refer to the the [APIs](https://pollen-robotics.github.io/reachy/autoapi/reachy/parts/hand/index.html#reachy.parts.hand.ForceGripper.close) for more details).
 
 {{< hint danger >}}
 The gripper on Reachy's end effector is not meant to hold objects for a long time. The motor used in the gripper will quickly overload if doing so. Holding objects as you can see on the TicTacToe demo for instance is a good approximation of what the robot can do for long period of time (hold ~5s rest ~10s).
@@ -502,9 +502,19 @@ We have defined the whole kinematic model of the arm. On a right arm equipped wi
 
 <!-- **TODO: schema** -->
 
-This describe the translation and rotation needed to go from the previous motor to the next one. We actually use a simplified Denavit hHrtenberg notation.
+This describe the translation and rotation needed to go from the previous motor to the next one. We actually use a simplified Denavit Hartenberg notation.
 
 <!-- TODO: model origin -->
+
+To use and understand kinematic model, you need to know how Reachy coordinate system is defined (from Reachy's perspective):
+
+* The _X_ axis corresponds to the foward arrow.
+* The _Y_ axis corresponds to the right to left arrow.
+* The _Z_ axis corresponds to the up arrow.
+
+And the origin of this coordinate system is located in the upper part of the robot trunk. Basically, if you imagine a segment going from the left shoulder to the right shoulder of the robot, the origin is the middle of this segment.
+
+The units used for this coordinate system are the meter. So the point (0.3, -0.2, 0) is 30cm in front of the origin, 20cm to the right and at the same height.
 
 ### Forward kinematics
 
@@ -515,7 +525,10 @@ We provide a function to directly compute the forward kinematics of a reachy arm
 
 ```python
 print(reachy.right_arm.forward_kinematics(joints_position=[0, 0, 0, 0, 0, 0, 0, 0]))
->>> TODO
+>>> array([[ 1.     ,  0.     ,  0.     ,  0.     ],
+           [ 0.     ,  1.     ,  0.     , -0.2085 ],
+           [ 0.     ,  0.     ,  1.     , -0.62413],
+           [ 0.     ,  0.     ,  0.     ,  1.     ]])
 ```
 
 {{< hint info >}}
@@ -535,7 +548,10 @@ You can also get the current pose by doing:
 ```python
 current_position = [m.present_position for m in reachy.right_arm.motors]
 print(reachy.right_arm.forward_kinematics(joints_position=current_position))
->>> TODO
+>>> array([[ 0.001,  0.   , -1.   ,  0.316],
+           [ 0.   ,  1.   ,  0.   , -0.209],
+           [ 1.   , -0.   ,  0.001, -0.308],
+           [ 0.   ,  0.   ,  0.   ,  1.   ]])
 ```
 
 {{< hint warning >}}
@@ -550,16 +566,91 @@ Knowing where you arm is located in the 3D space can be useful but most of the t
 
 This is what inverse kinematics does. We have provided a method to help you. You need to give it a 4x4 target pose (as defined in the forward kinematics) and an initial joint state. 
 
+To make this more concrete, let's first try with a simple example. We will make the hand of the robot goes from a point A to a point B in 3D space. You always have to provide poses to the inverse kinematics that are actually reachable by the robot. 
+
+For our starting point, let's imagine a point in front of the robot rigth shoulder and slightly below. If you remember Reachy coordinate system, we can define such a point with the following coordinates: $$A=(0.3, -0.2, -0.3)$$
+
+For our end point we will stay in a parallel plan in front of the robot (we keep the same x) and move to the upper left (20cm up and 20cm left). This gives us a B point such that:
+
+$$B=(0.3, 0.0, -0.1)$$
+
+But having the 3D position is not enough to design a pose. You also need to provide the 3D orientation. The identity rotation matrix corresponds to the zero position of the robot, ie. when the hand is facing toward the bottom. So if we want the hand facing forward when going from A to B, we need to rotate it from -90° around the y axis. The corresponding matrix can be obtained from scipy:
+
 ```python
-TODO: cool example
+from scipy.spatial.transform import Rotation as R
+
+print(R.from_euler('y', np.deg2rad(-90)).as_matrix(), 2)
+>>> array([[ 0., -0., -1.],
+           [ 0.,  1., -0.],
+           [ 1.,  0.,  0.]])
 ```
 
-Yet, it's important to understand that while the forward kinematics has a unique and well defined solution, the inverse kinematics is a much harder and ill defined problem. 
+By combining the position and orientation, this give us the following poses:
 
-First, a Right Arm with a Gripper has 8 Degrees Of Freedom (8 motors) meaning that you may have multiple solutions to reach the same 3D point in space.
+```python
+A = np.array((
+    (0, 0, -1,  0.3),
+    (0, 1,  0, -0.2),
+    (1, 0,  0, -0.3),
+    (0, 0,  0,  1),
+))
+
+B = np.array((
+    (0, 0, -1,  0.3),
+    (0, 1,  0,  0.0),
+    (1, 0,  0, -0.1),
+    (0, 0,  0,  1),
+))
+```
+
+{{< hint info >}}
+Finding the correct poses may be tricky, especially the orientation. You can always use the forward kinematics, with joint positions that corresponds roughly to where you are trying reach, to get a reference position and orientation.
+
+The inverse kinematics is also often used in combination with an external tracking system that can provide 3D pose of predefined object. In such case, you only need to make sure to express all pose in the same coordintate system.
+{{< /hint >}}
+
+The basic inverse kinematics used for Reachy relies on optimisation techniques. Results will thus largely depend on the initial guess you provide (if you are not supplying one, the current joints position of the robot will be used).
+
+In our case, we can imagine that a base position could corresponds to moving the elbow to -90 to face forward, thiss give us the full joint position to be [0, 0, 0, -90, 0, 0, 0, 0].
+
+If we put everything together, we can now ask the inverse kinematics to compute the joint position that corresponds to our A and B poses:
+
+```python
+
+JA = reachy.right_arm.inverse_kinematics(A, q0=[0, 0, 0, -90, 0, 0, 0, 0])
+print(np.round(JA, 2))
+>>> [3.1, 0.9, 0.82, -94.39, 1.18, 0.43, -0.8, 0.]
+
+JB = reachy.right_arm.inverse_kinematics(B, q0=[0, 0, 0, -90, 0, 0, 0, 0])
+print(np.round(JB, 2))
+>>> [-21.25, 10., 42.65, -110.79, 16.46, 39.25, -28.3, 0.]
+```
+
+You can then define a goto_right_arm_joint_solution and use it to go from A to B:
+
+```python
+import time
+
+def goto_right_arm_joint_solution(joint_solution, duration, wait):
+    reachy.goto({
+        m.name: j
+        for j, m in zip(joint_solution, reachy.right_arm.motors)
+    }, duration=duration, wait=wait)
+
+goto_right_arm_joint_solution(JA, duration=2, wait=True)
+
+time.sleep(2)
+
+goto_right_arm_joint_solution(JB, duration=2, wait=True)
+```
+
+You should have seen the robot follow the 3D line that we defined!
+
+If inverse kinematics is a really powerful way to define motions in coordinate systems that are better adapted to many task defintion (grasp the bottle in (x, y, z) for instance), this approach has also some limitations.
+
+First, it's important to understand that while the forward kinematics has a unique and well defined solution, the inverse kinematics is a much harder and ill defined problem. A Right Arm with a Gripper has 8 Degrees Of Freedom (8 motors) meaning that you may have multiple solutions to reach the same 3D point in space.
 
 Second, at the moment, the inverse kinematics is computed using an approximation method that may take time to converge. You also need to give it a starting point that may have a tremendous influence on the final result.
-
 
 {{< hint warning >}}
 Multiple approaches exist for tackling the inverse kinematics problem. We have provided the most straightforward one, using black box optimization, that work in a general context. Yet, we intend to provide other ones more dedicated to specific context: 
