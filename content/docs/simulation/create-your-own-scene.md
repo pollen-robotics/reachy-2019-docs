@@ -19,7 +19,9 @@ This lets you create your own 3D Scene within Unity so you can **build your own 
 Unity, editor version 2020.1.0b7 or higher. ([Get it here](https://unity3d.com/fr/beta/2020.1b))
 We rely on the new _Articulation Body_ component made for robotics. So it will not work on previous version.
 
-Also, make sure to setup a few parameters in your Scene to enable better robotics physics simulation **TODO: ask Sarah for a link**.
+To leverage more physical accuracy in your robotics simulation make sure to setup a few parameters in your Project Settings:
+* lower the _Fixed Timestep_, to 0.01s for instance (in the _Time_ Tab)
+* switch the _Solver Type_ to _Temporal Gauss Seidel_ (in the _Physics_ Tab)
 
 ## Import reachy package
 You can get the package asset of the reachy simulation on our GitHub deposit: [https://github.com/pollen-robotics/reachy-unity-package](https://github.com/pollen-robotics/reachy-unity-package).
