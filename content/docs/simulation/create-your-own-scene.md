@@ -11,6 +11,8 @@ This lets you create your own 3D Scene within Unity so you can **build your own 
 
 {{< img alt="reachy waiting" src="simu/reachy_standing.PNG" width="600px" >}}
 
+{{< img alt="Reachy can drag and drop objects" src="simu/dropTheMic.gif" width="600px" >}}
+
 
 ## What you need
 
@@ -41,7 +43,9 @@ We also provide IO (only a WebSocket for the moment, but other can be easily imp
 
 Reachy is composed of static parts, such as the torso, the left and the right shoulder cap, and of mobile parts such as the head (only the antennas can move for the moment) and the arms.
 
-You can directly make those parts move by setting the variables _targetPosition_ in the motors property of the _ReachyController_ component attached to the Reachy Prefab. **TODO: add gif** Each part of an arm is linked to a parent so moving one part will make the children move with it.
+You can directly make those parts move by setting the variables _targetPosition_ in the motors property of the _ReachyController_ component attached to the Reachy Prefab. Each part of an arm is linked to a parent so moving one part will make the children move with it.
+
+{{< img alt="moving reachy in the inspector view" src="simu/inspector_geafy.gif" width="600px" >}}
 
 {{< hint info >}}
 As, we use the Unity Physics engine, make sure you are in _Play Mode_ before trying to move the robot.
@@ -52,18 +56,21 @@ As, we use the Unity Physics engine, make sure you are in _Play Mode_ before try
 
 The _ReachyCommand_ script provides high level function to make reachy move and get his current state:
 * HandleCommand(SerializableCommands command): Giving a list of motors names and their target position, it will update the robot movements.
-* GetCurrentState(): Get the current state of reachy (composed of the cameras view, and the current  position of every motors).
+* GetCurrentState(): Get the current state of reachy (composed of the cameras view, and the current position of every motors).
 
 Those functions are for instance called by the IO when you are remotely controlling the robot.
 
 
 # Handle collisions
 
+{{< img alt="reachy flipping" src="simu/flippingTable.gif" width="600px" >}}
+
 Each motor use the [Articulation Body](https://docs.unity3d.com/2020.1/Documentation/ScriptReference/ArticulationBody.html) and [colider](https://docs.unity3d.com/ScriptReference/Collider.html) components, they allow Reachy to interact with other physical objects.
 According to the Unity Docmentation, "a Rigidbody object will be pulled downward by gravity and will react to collisions with incoming objects if the right Collider component is also present". 
 If you want to add other objects to your Scene and have Reachy interact with them, you need to make sure to attach those two components to them. For instance, you can make reachy flip a table by adding a rigidiBody and a collider to a table GameObject and ask reachy to quickly move his arm bottom-up (when close enough to the table).
 
-{{< img alt="reachy flipping" src="simu/flippingTable.gif" width="600px" >}}
+{{< img alt="handleCollision" src="simu/collisionHandle.gif" width="600px" >}}
+
 
 # Articulation Body
 
