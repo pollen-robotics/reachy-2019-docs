@@ -526,8 +526,8 @@ We provide a function to directly compute the forward kinematics of a reachy arm
 ```python
 print(reachy.right_arm.forward_kinematics(joints_position=[0, 0, 0, 0, 0, 0, 0, 0]))
 >>> array([[ 1.     ,  0.     ,  0.     ,  0.     ],
-           [ 0.     ,  1.     ,  0.     , -0.2085 ],
-           [ 0.     ,  0.     ,  1.     , -0.62413],
+           [ 0.     ,  1.     ,  0.     , -0.2    ],
+           [ 0.     ,  0.     ,  1.     , -0.6375 ],
            [ 0.     ,  0.     ,  0.     ,  1.     ]])
 ```
 
