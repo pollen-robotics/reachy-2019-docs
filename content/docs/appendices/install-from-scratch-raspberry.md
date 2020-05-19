@@ -22,6 +22,7 @@ Once booted and logged in the Raspberry-Pi, we need to run raspi-config to setup
 * Change hostname to _reachy_: _2-N1_
 * Turn on WiFi (you can set the country and your own WiFi if you want but this is not necessary) _2-N2-Cancel-Cancel-_
 * Turn on the camera _5-P1-Yes_
+* Turn on I2C _5-P5-Yes_
 * Finish and reboot
 
 ## Install Reachy needed software
@@ -29,13 +30,21 @@ Once booted and logged in the Raspberry-Pi, we need to run raspi-config to setup
 * Reconnect ```ssh pi@reachy.local``` (password _reachy_)
 * Create our own work folder ```mkdir dev``` and ```cd dev```
 * Clone Reachy software: ```git clone https://github.com/pollen-robotics/reachy```
-* Checkout latest release ```cd reachy```and ```git checkout tags/v1.0.0.a2```
+* Checkout latest release ```cd reachy```and ```git checkout tags/v1.0.1```
 * Install atlas for scipy: ```sudo apt install -y libatlas-base-dev```
 * Install deps for opencv: ```sudo apt install -y libhdf5-dev libhdf5-serial-dev libhdf5-103 libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5 libatlas-base-dev libjasper-dev```
 * Install Reachy dependencies using the system python3: ```pip3 install -r ~/dev/reachy/software/requirements.txt```
 * Install Reachy software using the system python3: ```pip3 install -e ~/dev/reachy/software```
 * Get the Access Point and dashboard libraries: ```cd ~/dev```and ```git clone https://github.com/pollen-robotics/RAP```
 * Install them: ```cd ~/dev/RAP/``` and ```sudo bash install.sh``` (Say Yes both time when asked during install)
+
+## Setup dual camera
+
+(see https://github.com/ArduCAM/RaspberryPi/tree/master/Multi_Camera_Adapter/Multi_Adapter_Board_2Channel_uc444)
+
+* cd /tmp
+* wget https://project-downloads.drogon.net/wiringpi-latest.deb
+* sudo dpkg -i wiringpi-latest.deb
 
 ## Install extra stuff
 
