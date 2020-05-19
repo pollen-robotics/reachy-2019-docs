@@ -29,15 +29,15 @@ So, to instantiate your robot we have to specify which parts you want to use. If
 from reachy import Reachy, parts
 
 reachy = Reachy(
-    left_arm=LeftArm(
+    left_arm=parts.LeftArm(
         io='/dev/ttyUSB*',
         hand='force_gripper',
     ),
-    right_arm=RightArm(
+    right_arm=parts.RightArm(
         io='/dev/ttyUSB*',
         hand='force_gripper',
     ),
-    head=Head(
+    head=parts.Head(
         io='/dev/ttyUSB*',
         camera_id=0,
     ),
@@ -50,11 +50,11 @@ And if you have only the right arm and the head:
 from reachy import Reachy, parts
 
 reachy = Reachy(
-    right_arm=RightArm(
+    right_arm=parts.RightArm(
         io='/dev/ttyUSB*',
         hand='force_gripper',
     ),
-    head=Head(
+    head=parts.Head(
         camera_id=0,
         io='/dev/ttyUSB*',
     ),
@@ -78,7 +78,7 @@ from reachy import Reachy, parts
 Our API is available through the [reachy](https://github.com/pollen-robotics/reachy) Python module. This is the main entry point for controlling your robot.
 
 ```python
-    right_arm=RightArm(
+    right_arm=parts.RightArm(
         io='/dev/ttyUSB*',
         hand='force_gripper',
     ),
@@ -91,7 +91,7 @@ Then, we specify which types of hand are attached to the arm. In our cases we se
 ### Going deeper: the head part
 
 ```python
-    head=Head(
+    head=parts.Head(
         camera_id=0,
         io='/dev/ttyUSB*',
     ),
