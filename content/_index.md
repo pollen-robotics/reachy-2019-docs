@@ -12,9 +12,8 @@ Reachy is an open source interactive robot designed to explore real-world applic
 Reachy makes AI & robotics accessible to researchers, innovation professionals and creatives. It comes in different flavors to let you prototype and create your real-world interactive & service applications right away! 
 
 This manual will guide you in all the steps to
-* finish the hardware assembly of your robot,
-* turn it on for the first time,
-* start using of our playground environment,
+* getting started and turn it on for the first time,
+* use of our playground environments,
 * or program it yourself. 
 
 You will also find many use examples, specifications and detail implementations. If you are missing some information or want to go deeper and interact with other Reachy's user, don't hesitate to join the discussion on our [forum](https://forum.pollen-robotics.com)!
