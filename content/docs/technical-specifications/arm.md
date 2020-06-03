@@ -26,6 +26,9 @@ Of course, this may really vary depending on the holding and duration configurat
 
 **Reachy's arm offers 7 degrees of movement + 1 for the gripper**
 
+{{< img alt="Motors of a Reachy arm" src="reachy-arm-front-motors.png" width="500px" >}}
+
+
 {{< columns >}}
 
 **Right Arm**
