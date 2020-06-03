@@ -7,7 +7,7 @@ title: "Program your robot"
 
 This section will guide you in how to control your robot. It will describe the most basic features needed to make your robot move and interact with its environment.
 
-The robot API is written in [Python](https://www.python.org) and version above 3.6 are supported. It is pre-installed on the Raspberry-Pi of the robot. So **to program your Reachy you don't need to install anything on your own machine**. Just connect to the Raspberry Pi as described in the [Getting Started](../getting-started/connect-to-your-robot/).
+The robot API is written in [Python](https://www.python.org) and versions above 3.6 are supported. It is pre-installed on the Raspberry-Pi of the robot. So **to program your Reachy you don't need to install anything on your own machine**. Just connect to the Raspberry Pi as described in the [Getting Started](../getting-started/connect-to-your-robot/).
 
 {{< hint info >}}
 Working remotely on the robot is possible via ssh or using a [Jupyter server](https://jupyter.org) (Jupyter is pre-installed on the Raspberry Pi).
