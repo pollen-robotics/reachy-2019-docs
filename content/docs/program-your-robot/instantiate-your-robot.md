@@ -21,7 +21,7 @@ Reachy is built around the concept of modular parts. A Reachy can be composed of
 * one arm (left or right) or both with different kind of end-effectors
 * a head
 
-{{< figure src="https://www.pollen-robotics.com/img/modules.gif" width="50%" >}}
+{{< img src="reachy-modules.gif" width="50%" >}}
 
 So, to instantiate your robot we have to specify which parts you want to use. If you are using a "full" Reachy, ie with both arm equipped with force gripper, and a head; you can run the following Python code on your Raspberry-Pi:
 

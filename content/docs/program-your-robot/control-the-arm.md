@@ -6,12 +6,15 @@ latex: true
 
 # Control the arm
 
-Once you have instantiated the _Reachy_ object, you are actually connected to your robot. This means that **the hardware (sensors and effectors) are synced with their software equivalent**. This synchronization loop runs at about 100Hz. In particular, this lets you retrieve the arm(s) state and send commands to make them move. 
+Once you have instantiated the _Reachy_ object, you are actually connected to your robot. This means that **the hardware (sensors and effectors) are synced with their software equivalent**. This synchronization loop runs at about 100Hz. In particular, this lets you retrieve the arm(s) state and send commands to make it move. 
 
 **Before actually running some commands, it's important to make sure you are ready**:
 
-* Make sure the robot is in a "safe" state (as shown in the images **TODO** for instance). If a wire is blocked or a motor is completly reversed, sending target position or even turning the motor on may result in a violent motion that may damage the robot.
+* Make sure the robot is in a "safe" state (as shown in the images below for instance). If a wire is blocked or a motor is completly reversed, sending target position or even turning the motor on may result in a violent motion that may damage the robot.
 * The motor are powerful so they can make the whole arm move fluidly. Do not hesitate to first try the move you want to make, with a low speed (we will show how to do that below). When you are sure everything is okay, you can increase the speed again.
+
+{{< img src="reachy-safe-position.jpg" width="50%" >}}
+
 
 {{< hint danger >}}
 More information is available on the [Safety first section](../posts/safety). It provides simple guidelines to avoid damaging your robot.
@@ -87,7 +90,7 @@ If one part is not present in your robot, it's value will simply be _None_.
 
 For each motor, we have defined angle limits. They correspond to what moves the arm can actually make. For instance, the elbow pitch is limited from 0° to 125°. The forearm yaw can move from -150° to 150°. 
 
-The zero position of each motor is defined so as when all motors are at 0°, the arm is straight down along the trunk. For more information on the motor orientation and configuration, please refer to the section **TODO**.
+The zero position of each motor is defined so as when all motors are at 0°, the arm is straight down along the trunk. For more information on the motor orientation and configuration, please refer to the section [Arm coordinate system](#arm-coordinate-system).
 
 <!-- **PHOTO** -->
 
@@ -206,12 +209,12 @@ Most of the time when controlling a robot, you want to move multiple motors at o
 
 You can actually use a [_goto_](https://pollen-robotics.github.io/reachy/autoapi/reachy/index.html#reachy.Reachy.goto) the robot level and specify a list of (motor, target_position). This will create a trajectory for each motor and run them all in parallel.
 
-To move both antennas at the same time, you can run:
+To move both arm and forearm yaw at the same time, you can run:
 ```python
 reachy.goto(
     goal_positions={
-        'head.left_antenna': 90,
-        'head.right_antenna': -90,
+        'right_arm.arm_yaw': 45,
+        'right_arm.hand.forearm_yaw': -45,
     },
     duration=2,
     wait=True,
@@ -219,7 +222,7 @@ reachy.goto(
 ```
 
 {{< hint info >}}
-Note the use of the complete motor name (eg. 'head.left_antenna') as a key string in the goal_positions dict.
+Note the use of the complete motor name (eg. _'right_arm.hand.forearm_yaw'_) as a key string in the goal_positions dict.
 {{< /hint >}}
 
 Motors from different parts can be mixed in the same _goto_.
@@ -241,16 +244,16 @@ You can concatenate multiple goto simply by using the _wait=True_ option and run
 ```python
 reachy.goto(
     goal_positions={
-        'head.left_antenna': 90,
-        'head.right_antenna': -90,
+        'right_arm.arm_yaw': 45,
+        'right_arm.hand.forearm_yaw': -45,
     },
     duration=2,
     wait=True,
 )
 reachy.goto(
     goal_positions={
-        'head.left_antenna': 0,
-        'head.right_antenna': 0,
+        'right_arm.arm_yaw': 0,
+        'right_arm.hand.forearm_yaw': 0,
     },
     duration=1,
     wait=True,
@@ -260,34 +263,35 @@ reachy.goto(
 You can also define positions, save them and then directly _go to_ those positions.
 
 ```python
-upper_pos = {
-    'head.left_antenna': 0,
-    'head.right_antenna': 0,
+first_pos = {
+    'right_arm.arm_yaw': 0,
+    'right_arm.hand.forearm_yaw': 0,
 }
-lower_pos = {
-    'head.left_antenna': 90,
-    'head.right_antenna': -90,
+second_pos = {
+    'right_arm.arm_yaw': 45,
+    'right_arm.hand.forearm_yaw': -45,
 }
 
 for _ in range(3):
-    reachy.goto(goal_positions=lower_pos, duration=2, wait=True)
-    reachy.goto(goal_positions=upper_pos, duration=1, wait=True)
+    reachy.goto(goal_positions=first_pos, duration=2, wait=True)
+    reachy.goto(goal_positions=second_pos, duration=1, wait=True)
 ```
 
 {{< hint info >}}
 An easy way to define a position is to actually record it directly on the robot. To do that, you can play with the compliant mode so you can freely move the robot and make it adopt the position you want.
 Then, you can record its position using a code similar to:
 ```python
-arm_position = {
+current_arm_position = {
     motor.name: motor.present_position for motor in reachy.right_arm.motors
 }
 
-reachy_whole_position = {
+current_reachy_whole_position = {
     motor.name: motor.present_position for motor in reachy.motors
 }
 ```
 Make sure only the motors you want to track are actually included in the position you have recorded.
 {{< /hint >}}
+
 
 ## Different trajectory interpolation
 
@@ -340,11 +344,11 @@ The Force Gripper also gives you access to the current _grip_force_. The load se
 
 ```python
 print(reachy.right_arm.hand.grip_force)
->>>TODO
+>>> 123.1
 ```
 
 {{< hint info >}}
-The returned value is nor accurate nor express in a standard unit system. Only relative values should be taken into account.
+The returned value is nor accurate nor expressed in a standard unit system. Only relative values should be taken into account.
 
 For instance:
 ```python
@@ -395,9 +399,9 @@ np.savez('my-recorded-trajectory.npz', **recorder.trajectories)
 
 The recorder can be restart as many times as you want. A new trajectory will be recorded on store as ```recorder.trajectories```.
 
-You can record any list of motors. For instance if you want to record the left antenna and the gripper you can use:
+You can record any list of motors. For instance if you want to record the arm yaw and the gripper you can use:
 ```python
-recorded_motors = [reachy.head.left_antenna, reachy.right_arm.hand.gripper]
+recorded_motors = [reachy.right_arm.arm_yaw, reachy.right_arm.hand.gripper]
 
 recorder = TrajectoryRecorder(recorded_motors)
 
@@ -478,33 +482,40 @@ The cubic smooth function will keep the same number of samples by default. But y
 
 <!-- **TODO: plot** -->
 
-## Forward & Inverse Kinematics
+## Arm coordinate system
 
-In all examples above, we have used joint coordinates. This means that we have controlled each joint separately. This can be hard and is often far from what we actually do as humans. When we want to grasp an object in front of us, we think of where we should put our hand, not how to flex each individual muscle to reach this position. This approach relies on the cartesian coordinates: the 3D position and orientation in space.
+### Joint coordinates
+
+In all examples above, we have used what is called joint coordinates. This means that we have controlled each joint separately. 
+
+
+### Kinematic model
+
+Controlling a robot in joint coordinates can be hard and is often far from what we actually do as humans. When we want to grasp an object in front of us, we think of where we should put our hand, not how to flex each individual muscle to reach this position. This approach relies on the cartesian coordinates: the 3D position and orientation in space.
 
 Forward and Inverse Kinematics is a way to go from one coordinates system to the other:
 
 * forward kinematics: joint coordinates --> cartesian coordinates
 * inverse kinematics: cartesian coordinates --> joint coordinates
 
-### Kinematic model
 
-We have defined the whole kinematic model of the arm. On a right arm equipped with a force gripper this actually look like this:
+We have defined the whole kinematic model of the arm. This means the translation and rotation required to go from one joint to the next one. On a right arm equipped with a force gripper this actually look like this:
 
-* shoulder_pitch - translation: [0, -0.19, 0] rotation: [0, 1, 0]
-* shoulder_roll - translation: [0, 0, 0] rotation: [1, 0, 0]
-* arm_yaw - translation: [0, 0, 0] rotation: [0, 0, 1]
-* elbow_pitch - translation: [0, 0, -0.307] rotation: [0, 1, 0]
-* forearm_yaw - translation: [0, 0, 0] rotation: [0, 0, 1]
-* wrist_pitch - translation: [0, 0, -0.224] rotation: [0, 1, 0]
-* wrist_roll - translation: [0, 0, -0.032] rotation: [1, 0, 0]
-* gripper - translation: [0, -0.185, -0.06] rotation: [0, 0, 0]
+| Motor | Translation | Rotation |
+|-------|-------------|----------|
+|shoulder_pitch|(0, -0.19, 0)|(0, 1, 0)|
+|shoulder_roll|(0, 0, 0)|(1, 0, 0)|
+|arm_yaw|(0, 0, 0)|(0, 0, 1)|
+|elbow_pitch|(0, 0, -0.28)|(0, 1, 0)|
+|forearm_yaw|(0, 0, 0)|(0, 0, 1)|
+|wrist_pitch|(0, 0, -0.25)|(0, 1, 0)|
+|wrist_roll|(0, 0, -0.0325)|(1, 0, 0)|
+|gripper|(0, -0.01, -0.075)|(0, 0, 0)|
 
-<!-- **TODO: schema** -->
 
 This describe the translation and rotation needed to go from the previous motor to the next one. We actually use a simplified Denavit Hartenberg notation.
 
-<!-- TODO: model origin -->
+{{< img src="reachy-arm-plan-front.png" width="50%" >}}
 
 To use and understand kinematic model, you need to know how Reachy coordinate system is defined (from Reachy's perspective):
 
@@ -518,7 +529,7 @@ The units used for this coordinate system are the meter. So the point (0.3, -0.2
 
 ### Forward kinematics
 
-Using these parameters we can actually compute the 3D position and orientation of any joint in the arm considering their joint angles. This can indeed be formalized as a trigonometry problem.
+Using the joint coordinates and the kinematic model defined above, we can actually compute the 3D position and orientation of any joint in the arm. This question can be formalized as a trigonometry problem and it's called the forward kinematics.
 
 We provide a function to directly compute the forward kinematics of a reachy arm. Assuming you are working on a Right Arm with a Force Gripper (8 joints), you can find the pose when all motors are at their zero position:
 
@@ -532,15 +543,13 @@ print(reachy.right_arm.forward_kinematics(joints_position=[0, 0, 0, 0, 0, 0, 0, 
 ```
 
 {{< hint info >}}
-The 4x4 matrix returned by the forward kinematics method is what is often called a pose. It actually encodes both the 3D translation and the 3D rotation into one single representation. 
-$$
-\begin{bmatrix}
+The 4x4 matrix returned by the forward kinematics method is what is often called a pose. It actually encodes both the 3D translation (as a 3D vector) and the 3D rotation (as a 3x3 matrix) into one single representation.
+$$\begin{bmatrix}
 R_{11} & R_{12} & R_{13} & T_x\\\\\\
 R_{21} & R_{22} & R_{23} & T_y\\\\\\
 R_{31} & R_{32} & R_{33} & T_z\\\\\\
 0 & 0 & 0 & 1
-\end{bmatrix}
-$$
+\end{bmatrix}$$
 
 {{< /hint >}}
 
@@ -555,16 +564,14 @@ print(reachy.right_arm.forward_kinematics(joints_position=current_position))
 ```
 
 {{< hint warning >}}
-If you are using an external 3D tracker, you may observe difference between the measure end effector position and the one given by the forward kinematics.
-
-Keep in mind that the forward kinematics rely on a theoretical model of the Reachy arm. You may have difference due to motor jerk or assembly approximation.
+If you are using an external 3D tracker, you may observe a difference between your measure of the end effector and the one given by the forward kinematics. Keep in mind that the forward kinematics rely on a theoretical model of the Reachy arm. You may have difference due to motor jerk or assembly approximation.
 {{< /hint >}}
 
 ### Inverse kinematics
 
-Knowing where you arm is located in the 3D space can be useful but most of the time what you want is to move the arm in cartesian coordinates. You want to have the possibility to say: "move your hand to [x, y, z] with a 90° rotation around Z axis".
+Knowing where you arm is located in the 3D space can be useful but most of the time what you want is to move the arm in cartesian coordinates. You want to have the possibility to say: "move your hand to [x, y, z] with a 90° rotation around the Z axis".
 
-This is what inverse kinematics does. We have provided a method to help you. You need to give it a 4x4 target pose (as defined in the forward kinematics) and an initial joint state. 
+This is what inverse kinematics does. We have provided a method to help you with that. You need to give it a 4x4 target pose (as given as a result by the forward kinematics) and an initial joint state. 
 
 To make this more concrete, let's first try with a simple example. We will make the hand of the robot goes from a point A to a point B in 3D space. You always have to provide poses to the inverse kinematics that are actually reachable by the robot. 
 
@@ -574,7 +581,11 @@ For our end point we will stay in a parallel plan in front of the robot (we keep
 
 $$B=(0.3, 0.0, -0.1)$$
 
-But having the 3D position is not enough to design a pose. You also need to provide the 3D orientation. The identity rotation matrix corresponds to the zero position of the robot, ie. when the hand is facing toward the bottom. So if we want the hand facing forward when going from A to B, we need to rotate it from -90° around the y axis. The corresponding matrix can be obtained from scipy:
+But having the 3D position is not enough to design a pose. You also need to provide the 3D orientation. The identity rotation matrix corresponds to the zero position of the robot, ie. when the hand is facing toward the bottom. So if we want the hand facing forward when going from A to B, we need to rotate it from -90° around the y axis. 
+
+{{< img src="reachy-arm-plan-side.png" width="75%" >}}
+
+The corresponding matrix can be obtained from scipy:
 
 ```python
 from scipy.spatial.transform import Rotation as R
@@ -646,17 +657,23 @@ goto_right_arm_joint_solution(JB, duration=2, wait=True)
 
 You should have seen the robot follow the 3D line that we defined!
 
-If inverse kinematics is a really powerful way to define motions in coordinate systems that are better adapted to many task defintion (grasp the bottle in (x, y, z) for instance), this approach has also some limitations.
+Inverse kinematics is a really powerful way to define motions in coordinate systems that fits better with the defintion of many tasks (grasp the bottle in (x, y, z) for instance). Yet, this approach has also some important limitations.
 
 First, it's important to understand that while the forward kinematics has a unique and well defined solution, the inverse kinematics is a much harder and ill defined problem. A Right Arm with a Gripper has 8 Degrees Of Freedom (8 motors) meaning that you may have multiple solutions to reach the same 3D point in space.
 
-Second, at the moment, the inverse kinematics is computed using an approximation method that may take time to converge. You also need to give it a starting point that may have a tremendous influence on the final result.
+Second, there are many approaches to solve the inverse kinematics. The main one used in Reachy is based on an black-box optimisation technique that may take time to converge. You also need to give it a starting point that may have a tremendous influence on the final result. Other approaches can be used but they all have they pros and cons and you may use one or the other depending on the task you are trying to solve.
 
-{{< hint warning >}}
-Multiple approaches exist for tackling the inverse kinematics problem. We have provided the most straightforward one, using black box optimization, that work in a general context. Yet, we intend to provide other ones more dedicated to specific context: 
+## Motor temperature and security
 
-* having more natural movement
-* minimizing change when performing whole cartesian trajectory
-* computation speed
-* ...
-{{< /hint >}}
+The motor used in Reachy arm are servo-motors and they are providing extra information. 
+
+You can get their current temperature (in °C). For instance, to get the temprature of the elbow_pitch you can simply do:
+
+```python
+print(reachy.right_arm.elbow_pitch.temperature)
+>>> 34.1
+```
+
+There is an automatic behavior that monitors those temperature and will turn on the fan inside the arm to cool it down if needed. A temperature above 45°C will trigger the fan, while going below 40°C will turn it off. 
+
+There is also an internal safety inside the motor that will automatically shut the motor down if it reaches 55°C. This is to avoid damaging a motor. To turn it on again, you will have to power it off and on again. There is also an overload safety. It will also shutdown the motor if the load applied on the motor is too high for a period of time. See the [Safety first section](../../posts/safety/) for more details.
