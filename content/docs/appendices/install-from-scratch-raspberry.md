@@ -30,7 +30,7 @@ Once booted and logged in the Raspberry-Pi, we need to run raspi-config to setup
 * Reconnect ```ssh pi@reachy.local``` (password _reachy_)
 * Create our own work folder ```mkdir dev``` and ```cd dev```
 * Clone Reachy software: ```git clone https://github.com/pollen-robotics/reachy```
-* Checkout latest release ```cd reachy```and ```git checkout tags/v1.1.4```
+* Checkout latest release ```cd reachy```and ```git checkout tags/v1.1.5```
 * Install atlas for scipy: ```sudo apt install -y libatlas-base-dev```
 * Install deps for opencv: ```sudo apt install -y libhdf5-dev libhdf5-serial-dev libhdf5-103 libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5 libatlas-base-dev libjasper-dev```
 * Install Reachy dependencies using the system python3: ```pip3 install -r ~/dev/reachy/software/requirements.txt```
