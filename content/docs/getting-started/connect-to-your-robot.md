@@ -24,7 +24,7 @@ First, you can find the Raspberry-Pi inside the trunk of the robot, as shown on 
 
 
 Then, if you want to update or re-install the system, we recommend you to rewrite the whole image. You can
-use [etcher](https://www.balena.io/etcher/) to burn the ISO. You will need a SD-card with at least a 16Go capacity. You can find the latest ISO [here](TODO).
+use [etcher](https://www.balena.io/etcher/) to burn the ISO. You will need a SD-card with at least a 16Go capacity. You can find the latest ISO [here](https://github.com/pollen-robotics/reachy/releases/latest).
 
 {{< hint danger >}}
 **Backup**
