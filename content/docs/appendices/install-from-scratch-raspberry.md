@@ -46,6 +46,21 @@ Once booted and logged in the Raspberry-Pi, we need to run raspi-config to setup
 * wget https://project-downloads.drogon.net/wiringpi-latest.deb
 * sudo dpkg -i wiringpi-latest.deb
 
+## Setup Coral toolkit
+
+(see https://coral.ai/docs/accelerator/get-started/)
+
+* echo "deb https://packages.cloud.google.com/apt coral-edgetpu-stable main" | sudo tee /etc/apt/sources.list.d/coral-edgetpu.list
+* curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+* sudo apt-get update
+* sudo apt-get install libedgetpu1-std
+* pip3 install https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-linux_armv7l.whl
+* cd ~/dev
+* mkdir coral && cd coral
+* git clone https://github.com/google-coral/tflite.git
+* cd tflite/python/examples/classification
+* bash install_requirements.sh
+
 ## Install extra stuff
 
 * Install IPython, Jupyter, Matplotlib: ```pip3 install ipython jupyter matplotlib```
