@@ -78,5 +78,5 @@ Once booted and logged in the Raspberry-Pi, we need to run raspi-config to setup
 * Connect the reachy SD-card to the other Raspberry PI (using an USB adaptor)
 * Create an img using dd (check the disk number using ```sudo fdisk -l```): ```sudo dd bs=4M if=/dev/sda of=reachy-$(date +%F).img conv=fsync```
 * download shrink: ```wget https://raw.githubusercontent.com/Drewsif/PiShrink/master/pishrink.sh```
-* Run ```sudo bash pishrink.sh -p -z reachy-$(date +%F).img```
+* Run ```sudo bash pishrink.sh -pz reachy-$(date +%F).img```
 * Share the create compressed img!
