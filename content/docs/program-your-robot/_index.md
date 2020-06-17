@@ -18,7 +18,7 @@ The SDK has been designed to be accessible and easy-to-use. Yet, as it is fully 
 
 In this section, we will cover:
 * how to instantiate your robot and define the parts you are using,
-* make the arm moves (motor by motor or using kinematics), recording and replay motions,
+* make the arm move (motor by motor or using kinematics), recording and replay motions,
 * make the head look somewhere specific,
 * and run pre-defined behaviors.
 
