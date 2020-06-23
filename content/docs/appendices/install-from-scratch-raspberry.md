@@ -60,6 +60,7 @@ Once booted and logged in the Raspberry-Pi, we need to run raspi-config to setup
 * git clone https://github.com/google-coral/tflite.git
 * cd tflite/python/examples/classification
 * bash install_requirements.sh
+* sudo apt-get install python3-edgetpu
 
 ## Install extra stuff
 
