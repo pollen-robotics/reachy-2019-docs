@@ -61,6 +61,7 @@ Once booted and logged in the Raspberry-Pi, we need to run raspi-config to setup
 * cd tflite/python/examples/classification
 * bash install_requirements.sh
 * sudo apt-get install python3-edgetpu
+* sudo apt-get install edgetpu-examples
 
 ## Install extra stuff
 
