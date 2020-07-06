@@ -30,7 +30,7 @@ Once booted and logged in the Raspberry-Pi, we need to run raspi-config to setup
 * Reconnect ```ssh pi@reachy.local``` (password _reachy_)
 * Create our own work folder ```mkdir dev``` and ```cd dev```
 * Clone Reachy software: ```git clone https://github.com/pollen-robotics/reachy```
-* Checkout latest release ```cd reachy```and ```git checkout tags/v1.1.9```
+* Checkout latest release ```cd reachy```and ```git checkout tags/v1.1.13```
 * Install atlas for scipy: ```sudo apt install -y libatlas-base-dev```
 * Install deps for opencv: ```sudo apt install -y libhdf5-dev libhdf5-serial-dev libhdf5-103 libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5 libatlas-base-dev libjasper-dev```
 * Install Reachy dependencies using the system python3: ```pip3 install -r ~/dev/reachy/software/requirements.txt```
@@ -60,15 +60,14 @@ Once booted and logged in the Raspberry-Pi, we need to run raspi-config to setup
 * git clone https://github.com/google-coral/tflite.git
 * cd tflite/python/examples/classification
 * bash install_requirements.sh
-* sudo apt-get install python3-edgetpu
-* sudo apt-get install edgetpu-examples
+* sudo apt-get install python3-edgetpu edgetpu-examples
 
 ## Install extra stuff
 
 * Install IPython, Jupyter, Matplotlib: ```pip3 install ipython jupyter matplotlib```
 * Setup ipywidgets: 
-    - ```pip install ipywidgets```
-    - ```jupyter nbextension enable --py widgetsnbextension```
+    - ```pip3 install ipywidgets```
+    - ```/home/pi/.local/bin/jupyter nbextension enable --py widgetsnbextension```
 * Install dfu-util: ```sudo apt install dfu-util```
 
 ## Check if everything is fine
