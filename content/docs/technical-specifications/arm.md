@@ -36,7 +36,7 @@ Of course, this may really vary depending on the holding and duration configurat
 | Motor name | Angle limits | Motor ID |
 |:----------:|:------------:|:--------:|
 |shoulder_pitch| -180, 90   | 10       |
-|shoulder_roll | -180, -10   | 11       |
+|shoulder_roll | -180, 10   | 11       |
 |arm_yaw       | -90, 90    | 12       |
 |elbow_pitch   | -125,  0   | 13       |
 |forearm_yaw   | -100, 100  | 14       |
