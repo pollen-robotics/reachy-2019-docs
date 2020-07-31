@@ -18,9 +18,9 @@ weight: 160
 * Forearm: 590g
 * Gripper: 230g
 
-**Maximum payload: 500g** 
+**Maximum payload: 500g**
 
-Of course, this may really vary depending on the holding and duration configuration. 
+Of course, this may really vary depending on the holding and duration configuration.
 
 ## Degrees of freedom
 
@@ -36,11 +36,11 @@ Of course, this may really vary depending on the holding and duration configurat
 | Motor name | Angle limits | Motor ID |
 |:----------:|:------------:|:--------:|
 |shoulder_pitch| -180, 90   | 10       |
-|shoulder_roll | -10, 180   | 11       |
+|shoulder_roll | -180, -10   | 11       |
 |arm_yaw       | -90, 90    | 12       |
 |elbow_pitch   | -125,  0   | 13       |
-|forearm_yaw   | -150, 150  | 14       |
-|wrist_pitch   | -50, 50    | 15       |
+|forearm_yaw   | -100, 100  | 14       |
+|wrist_pitch   | -45, 45    | 15       |
 |wrist_roll    | -45, 45    | 16       |
 |gripper       | -69, 20    | 17       |
 
@@ -54,8 +54,8 @@ Of course, this may really vary depending on the holding and duration configurat
 |shoulder_roll | -10, 180   | 21       |
 |arm_yaw       | -90, 90    | 22       |
 |elbow_pitch   | 0,  125    | 23       |
-|forearm_yaw   | -150, 150  | 24       |
-|wrist_pitch   | -50, 50    | 25       |
+|forearm_yaw   | -100, 100  | 24       |
+|wrist_pitch   | -45, 45    | 25       |
 |wrist_roll    | -45, 45    | 26       |
 |gripper       | -69, 20    | 27       |
 {{< /columns >}}
@@ -64,7 +64,7 @@ Of course, this may really vary depending on the holding and duration configurat
 
 ## Standard version
 
-Animated by the following motors: 
+Animated by the following motors:
 
 * 1 Dynamixel MX-106T
 * 3 Dynamixel MX-64AT
@@ -73,11 +73,8 @@ Animated by the following motors:
 
 ## Performance version
 
-Animated by the following motors: 
+Animated by the following motors:
 * 3 Dynamixel MX-106T
 * 1 Dynamixel MX-64AT
 * 2 Dynamixel MX-28AT
 * 1 Dynamixel AX-18A
-
-
- 
