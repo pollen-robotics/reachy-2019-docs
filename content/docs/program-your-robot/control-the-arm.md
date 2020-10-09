@@ -170,7 +170,7 @@ Yet, you should be careful when doing so, because the motor **will try to reach 
 
 ```python
 reachy.right_arm.elbow_pitch.moving_speed = 50  # in degrees per sec 
-reachy.right_arm_elbow_pitch.goal_position = 110  # in degrees
+reachy.right_arm.elbow_pitch.goal_position = 110  # in degrees
 ```
 
 Yet, in our experience, when using this approach for controlling a motor, it may be hard to follow smoothly complex trajectories and have precise timing. You only set the maximum speed but **have no control over the acceleration**.
