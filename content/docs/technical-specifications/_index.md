@@ -9,8 +9,8 @@ Dimensions: https://tinyurl.com/qk8wuoz
 
 Overall weight: 7 kg
 
-I/O power supply: DC 24 V / Max. 3 A
+Power supply: DC 12 V / 15 A
 
 Temperature:	0-45°C
 
-Interfaces:	Ethernet / Wifi / RS232 / Modbus / Ethernet TCP/IP
+Interfaces:	Ethernet / Wifi / USB 3 / HDMi
