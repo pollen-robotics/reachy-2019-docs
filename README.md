@@ -1,5 +1,7 @@
 # Reachy 2019 manual
 
+**:warning::warning: This documentation is meant for Reachy 2019. If you have a newer version (Reachy 2021) please refer to the corresponding documentation! :warning::warning:** 
+
 This repository holds the full documentation for Reachy. It's based on the [hugo theme book](https://themes.gohugo.io/hugo-book/). 
 
 ## To contribute
