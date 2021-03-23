@@ -7,7 +7,7 @@ This repository holds the full documentation for Reachy. It's based on the [hugo
 ## To contribute
 
 The easiest way: 
-* Go to the build docs: https://pollen-robotics.github.io/reachy-docs/
+* Go to the build docs: https://pollen-robotics.github.io/reachy-2019-docs/
 * click on the _edit page_ link at the bottom of the page and follow the instructions.
 
 The hardest way:
