@@ -1,4 +1,4 @@
-baseURL = "https://pollen-robotics.github.io/reachy-docs/"
+baseURL = "https://pollen-robotics.github.io/reachy-2019-docs/"
 languageCode = "en-us"
 title = "Reachy manual"
 theme = "book"
@@ -6,5 +6,5 @@ googleAnalytics = "UA-92714924-1"
 enableEmoji = true
 
 [params]
-  BookRepo = "https://github.com/pollen-robotics/reachy-docs"
+  BookRepo = "https://github.com/pollen-robotics/reachy-2019-docs"
   BookEditPath = "edit/master/content"
