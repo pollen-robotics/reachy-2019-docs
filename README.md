@@ -1,4 +1,4 @@
-# Reachy manual
+# Reachy 2019 manual
 
 This repository holds the full documentation for Reachy. It's based on the [hugo theme book](https://themes.gohugo.io/hugo-book/). 
 
